@@ -1,5 +1,4 @@
 
-
 {
   "hosting": {
     "rewrites": [{
@@ -16,8 +15,7 @@
   "emulators": {
     "hosting": {
       "host": "localhost",
-      "port": "5556"
+      "port": "5050"
     }
   }
 }
-

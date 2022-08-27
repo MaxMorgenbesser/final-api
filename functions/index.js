@@ -1,18 +1,29 @@
-import functions from 'firebase-functions'
-import express from 'express'
-import cors from 'cors'
+import functions from "firebase-functions";
+import express from "express";
+import cors from "cors";
+import { credentials } from "./src/credentials.js";
+import { MongoClient } from "mongodb";
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+const client = new MongoClient(credentials);
+const db = client.db("final");
+const collection = db.collection("resumes");
+
+app.get("/", (req, res) => {
+  res.send("it works");
+});
 
 
-app.get('/',(req,res)=>{
-    res.send('it works')
-} )
+app.post("/addresume", async (req, res) => {
+  let newRes = req.body;
+  await collection.insertOne(newRes);
+  res.send({"resume was added":true})
+});
 
-
-export const api = functions.https.onRequest(app)
+export const api = functions.https.onRequest(app);
 
 // api name: https://final-api-mam.web.app/
 
