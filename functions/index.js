@@ -12,8 +12,10 @@ const client = new MongoClient(credentials);
 const db = client.db("final");
 const collection = db.collection("resumes");
 
-app.get("/", (req, res) => {
-  res.send("it works");
+app.get("/getresumes", (req, res) => {
+  collection.find({}).toArray((err,resumes)=>{
+    res.send(resumes)
+  })
 });
 
 
@@ -22,6 +24,7 @@ app.post("/addresume", async (req, res) => {
   await collection.insertOne(newRes);
   res.send({"resume was added":true})
 });
+
 
 export const api = functions.https.onRequest(app);
 
