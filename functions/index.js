@@ -8,29 +8,29 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 const client = new MongoClient(credentials);
 const db = client.db("final");
 const collection = db.collection("resumes");
 
 app.get("/getresumes", (req, res) => {
-  collection.find({}).toArray((err,resumes)=>{
-    res.send(resumes)
-  })
+  collection.find({}).toArray((err, resumes) => {
+    res.send(resumes);
+  });
 });
-
 
 app.post("/addresume", async (req, res) => {
   let newRes = req.body;
   await collection.insertOne(newRes);
-  res.send({"resume was added":true})
+  res.send({ "resume was added": true });
 });
 
-app.put('/:id', async (req,res)=>{
-  
-collection.findOneAndUpdate(req.query, {$inc:req.body})
-res.send({"updated":true})
-})
+app.put("/:id", async (req, res) => {
+  await collection.findOneAndUpdate(
+    { _id: new ObjectId(req.params.id) },
+    { $inc: req.body }
+  );
+  res.send({ updated: true });
+});
 export const api = functions.https.onRequest(app);
 
 // api name: https://final-api-mam.web.app/
