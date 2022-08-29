@@ -2,7 +2,7 @@ import functions from "firebase-functions";
 import express from "express";
 import cors from "cors";
 import { credentials } from "./src/credentials.js";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 const app = express();
 app.use(express.json());
@@ -26,7 +26,11 @@ app.post("/addresume", async (req, res) => {
   res.send({"resume was added":true})
 });
 
-
+app.put('/:id', async (req,res)=>{
+  
+collection.findOneAndUpdate(req.query, {$inc:req.body})
+res.send({"updated":true})
+})
 export const api = functions.https.onRequest(app);
 
 // api name: https://final-api-mam.web.app/
