@@ -31,6 +31,16 @@ app.put("/:id", async (req, res) => {
   );
   res.send({ updated: true });
 });
+
+
+// app.put("/userinfo/:id", async (req, res) => {
+//   await collection.findOneAndUpdate(
+//     { _id: new ObjectId(req.params.id) },
+//     { $push: req.body }
+//   );
+
+//   res.send({ SentUserInfo: true });
+// });
 export const api = functions.https.onRequest(app);
 
 // api name: https://final-api-mam.web.app/
