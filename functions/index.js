@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { credentials } from "./src/credentials.js";
 import { MongoClient, ObjectId } from "mongodb";
+import pdf from "./pdf-parse/index.js";
 
 const app = express();
 app.use(express.json());
@@ -20,8 +21,16 @@ app.get("/getresumes", (req, res) => {
 
 app.post("/addresume", async (req, res) => {
   let newRes = req.body;
-  await collection.insertOne(newRes);
-  res.send({ "resume was added": true });
+  let filebase = req.body.filebase64;
+  let Fbase64 = filebase.replace("data:application/pdf;base64,", "");
+  let buf = new Buffer.from(Fbase64, "base64");
+  pdf(buf)
+    .then(function (data) {
+      let text = data.text;
+      collection.insertOne({ newRes, words: text });
+      res.send({ newRes });
+    })
+    .catch((err) => console.log(err));
 });
 
 app.put("/:id", async (req, res) => {
@@ -31,7 +40,6 @@ app.put("/:id", async (req, res) => {
   );
   res.send({ updated: true });
 });
-
 
 // app.put("/userinfo/:id", async (req, res) => {
 //   await collection.findOneAndUpdate(
