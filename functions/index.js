@@ -32,7 +32,7 @@ app.post("/addresume", async (req, res) => {
     .then(function (data) {
       let text = data.text;
       collection.insertOne({ newRes, words: text });
-      res.send({ newRes });
+      res.send({ text });
     })
     .catch((err) => console.log(err));
 });
