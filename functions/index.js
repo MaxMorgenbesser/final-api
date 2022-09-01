@@ -38,12 +38,6 @@ app.post("/addresume", async (req, res) => {
 });
 
 
-app.get("/getone", async (req, res) => {
-  // fb=newRes.filebase64
-  let oneRes=await collection.findOne({})
-    res.send(oneRes)
-});
-
 
 app.put("/:id", async (req, res) => {
   await collection.findOneAndUpdate(
