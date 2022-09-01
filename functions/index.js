@@ -5,19 +5,23 @@ import { credentials } from "./src/credentials.js";
 import { MongoClient, ObjectId } from "mongodb";
 import pdf from "./pdf-parse/index.js";
 
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+
 const client = new MongoClient(credentials);
 const db = client.db("final");
 const collection = db.collection("resumes");
+
 
 app.get("/getresumes", (req, res) => {
   collection.find({}).toArray((err, resumes) => {
     res.send(resumes);
   });
 });
+
 
 app.post("/addresume", async (req, res) => {
   let newRes = req.body;
@@ -32,6 +36,14 @@ app.post("/addresume", async (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+
+app.get("/getone", async (req, res) => {
+  // fb=newRes.filebase64
+  let oneRes=await collection.findOne({})
+    res.send(oneRes)
+});
+
 
 app.put("/:id", async (req, res) => {
   await collection.findOneAndUpdate(
